@@ -59,19 +59,16 @@ int module_start(SceSize argc, const void *args){
 	ksceKernelGetMemBlockBase(uid, (void**)&fb_addr);
 	ksceKernelGetMemBlockBase(rgbuid, (void**)&bmp_addr);
 
-	ksceDmacMemset(fb_addr, 0xFF, 0x1FE000); // alpha will be FF, this is fallback
-	ksceDebugPrintf("memset okke!\n");
-
 	fd = ksceIoOpen("ur0:tai/boot_splash.bmp", SCE_O_RDONLY, 0);
 	ksceIoLseek(fd, 54,	SCE_SEEK_SET); // 54 byte bmp header
 	ksceIoRead(fd, bmp_addr, 0x17E7E2); // 0x17E836 - 54 = 0x17E7E2
 	ksceIoClose(fd);
     ksceDebugPrintf("bmp read okke!\n");
 
-    for(int i = 544 - 1; i >= 0; i--) {
+    for(int i = 0; i < 544; i++) {
     	for(int j = 0; j < 960; j++) {
     		// A B G R
-        	*(uint32_t *)(fb_addr + ((i * 960) + j) * 4) =
+        	*(uint32_t *)(fb_addr + (((544 - i) * 960) + j) * 4) =
             	((((char *)bmp_addr)[((i * 960) + j) * 3 + 2]) <<  0) |
     	        ((((char *)bmp_addr)[((i * 960) + j) * 3 + 1]) <<  8) |
         	    ((((char *)bmp_addr)[((i * 960) + j) * 3 + 0]) << 16) |
