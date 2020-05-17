@@ -28,7 +28,7 @@ target_link_libraries(custom_boot_splash
   SceDisplayForDriver_stub
 )
 
-dolce_create_self(custom_boot_splash.skprx kplugin
+dolce_create_self(custom_boot_splash.skprx custom_boot_splash
   CONFIG exports.yml
   UNSELF
 )
